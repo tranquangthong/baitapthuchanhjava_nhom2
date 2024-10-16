@@ -12,7 +12,7 @@ class SinhVien {
     public SinhVien() {
     }
 
-    public void nhapThongTin() {
+    public void nhapThongTin
         Scanner sc = new Scanner(System.in);
         System.out.print("Nhập mã sinh viên: ");
         maSV = sc.nextLine();
