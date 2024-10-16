@@ -5,28 +5,36 @@ import java.util.Scanner;
 
 class SinhVien {
     private String maSV;
-    private String tenSV;
+    private String ten;
     private String ngaySinh;
     private double diemTB;
 
-    public SinhVien() {
+    // Constructor
+    public SinhVien(String maSV, String ten, String ngaySinh, double diemTB) {
+        this.maSV = maSV;
+        this.ten = ten;
+        this.ngaySinh = ngaySinh;
+        this.diemTB = diemTB;
     }
 
-    public void nhapThongTin
+    // Phương thức nhập thông tin
+    public static SinhVien nhapThongTin() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Nhập mã sinh viên: ");
-        maSV = sc.nextLine();
+        String maSV = sc.nextLine();
         System.out.print("Nhập tên sinh viên: ");
-        tenSV = sc.nextLine();
+        String ten = sc.nextLine();
         System.out.print("Nhập ngày sinh: ");
-        ngaySinh = sc.nextLine();
+        String ngaySinh = sc.nextLine();
         System.out.print("Nhập điểm trung bình: ");
-        diemTB = sc.nextDouble();
+        double diemTB = sc.nextDouble();
+        return new SinhVien(maSV, ten, ngaySinh, diemTB);
     }
 
+    // Phương thức in thông tin
     public void inThongTin() {
         System.out.println("Mã SV: " + maSV);
-        System.out.println("Tên SV: " + tenSV);
+        System.out.println("Tên: " + ten);
         System.out.println("Ngày sinh: " + ngaySinh);
         System.out.println("Điểm trung bình: " + diemTB);
     }
@@ -35,31 +43,22 @@ class SinhVien {
         return diemTB;
     }
 
+    // Main để thử nghiệm
     public static void main(String[] args) {
-        ArrayList<SinhVien> danhSachSV = new ArrayList<>();
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Nhập số lượng sinh viên: ");
-        int soSV = sc.nextInt();
+        ArrayList<SinhVien> dsSinhVien = new ArrayList<>();
+        dsSinhVien.add(nhapThongTin());
+        dsSinhVien.add(nhapThongTin());
 
-        for (int i = 0; i < soSV; i++) {
-            SinhVien sv = new SinhVien();
-            System.out.println("Nhập thông tin sinh viên thứ " + (i + 1) + ":");
-            sv.nhapThongTin();
-            danhSachSV.add(sv);
-        }
-
-        Collections.sort(danhSachSV, new Comparator<SinhVien>() {
-            @Override
+        // Sắp xếp danh sách sinh viên theo điểm trung bình giảm dần
+        Collections.sort(dsSinhVien, new Comparator<SinhVien>() {
             public int compare(SinhVien sv1, SinhVien sv2) {
                 return Double.compare(sv2.getDiemTB(), sv1.getDiemTB());
             }
         });
 
-        System.out.println("\nDanh sách sinh viên sau khi sắp xếp theo điểm trung bình giảm dần:");
-        for (SinhVien sv : danhSachSV) {
+        // In thông tin sinh viên
+        for (SinhVien sv : dsSinhVien) {
             sv.inThongTin();
-            System.out.println();
         }
     }
 }
-
