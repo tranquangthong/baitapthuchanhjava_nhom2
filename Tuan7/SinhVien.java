@@ -4,46 +4,80 @@
  */
 package com.mycompany.thuchanhtuan7;
 
+import java.util.Scanner;
+
 /**
  *
  * @author LENOVO
  */
-public class SinhVien {
-    private String maSinhVien;
-    private String ten;
-    private String ngaySinh;
-    private double diemTrungBinh;
-
-    // Constructor
-    public SinhVien(String maSinhVien, String ten, String ngaySinh, double diemTrungBinh) {
-        this.maSinhVien = maSinhVien;
-        this.ten = ten;
-        this.ngaySinh = ngaySinh;
-        setDiemTrungBinh(diemTrungBinh);
+public class TaiKhoan {
+    public Scanner sc=new Scanner(System.in);
+    private String soTK;
+    private String chuTK;
+    private double soDu;
+    private String matKhau;
+    public TaiKhoan(String soTK,String chuTK,double soDu,String matKhau){
+        this.soTK=soTK;
+        this.chuTK=chuTK;
+        this.soDu=soDu;
+        this.matKhau=matKhau;
     }
-
-    // Đảm bảo điểm trung bình hợp lệ
-    public void setDiemTrungBinh(double diemTrungBinh) {
-        if (diemTrungBinh >= 0 && diemTrungBinh <= 10) {
-            this.diemTrungBinh = diemTrungBinh;
+    public void guiTien(){
+        double soTienGui;
+        System.out.println("Nhap so tien gui:");
+        soTienGui=sc.nextDouble();
+        if(soTienGui>0){
+            this.soDu+=soTienGui;
         } else {
-            System.out.println("Diem trung binh phai lon hon hoac bang 0 va nho hon hoac bang 10!");
+            System.out.println("So tien gui phai lon hon 0!");
         }
     }
-
-    public double getDiemTrungBinh() {
-        return diemTrungBinh;
-    }
-    public String xepLoai() {
-        if (diemTrungBinh >= 8) {
-            return "Giỏi";
-        } else if (diemTrungBinh >= 6.5) {
-            return "Khá";
-        } else if (diemTrungBinh >= 5) {
-            return "Trung bình";
+    public void rutTien(){
+        double soTienRut;
+        System.out.println("Nhap so tien rut:");
+        soTienRut=sc.nextDouble();
+        sc.nextLine();
+        if(soTienRut>0 && soTienRut<=this.soDu){
+            this.soDu-=soTienRut;
+        } else if(soTienRut>this.soDu) {
+            System.out.println("So tien trong tai khoan khong du!");
         } else {
-            return "Yếu";
+            System.out.println("So tien rut phai lon hon 0!");
         }
     }
+    public void ktraSoDu(){
+        System.out.println("So du la:"+this.soDu);
+    }
+    int danhdau=0;
+    public void doiMK() {
+        do{
+            System.out.println("Nhap mat khau hien tai:");
+            String matKhauCu=sc.nextLine();
+            if(this.matKhau.equals(matKhauCu)){
+                System.out.println("Nhap mat khau moi:");
+                String matKhauMoi=sc.nextLine();
+                this.matKhau=matKhauMoi;
+                if(this.matKhau.equals(matKhauCu)){//check trường hợp người dùng nhập mật khẩu mới trùng với mật khẩu cũ
+                    int danhdau2=0;
+                    do{
+                        System.out.println("Mat khau moi trung voi mat khau cu! Nhap mat khau khac:");
+                        matKhauMoi=sc.nextLine();
+                        this.matKhau=matKhauMoi;
+                        if(!this.matKhau.equals(matKhauCu)){
+                            danhdau2=1;
+                            System.out.println("Thay doi mat khau thanh cong!");
+                            danhdau=1;
+                        }
+                    } while(danhdau2!=1);
+                }
+                else{
+                    danhdau=1;
+                    System.out.println("Thay doi mat khau thanh cong!");                   
+                }
 
+        } else  {
+            System.out.println("Mat khau hien tai khong dung! Khong the thay doi mat khau!");
+        }
+    }  while(danhdau!=1);
+        }
 }
