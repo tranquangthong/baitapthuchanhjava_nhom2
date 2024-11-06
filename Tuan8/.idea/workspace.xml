@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="eada1acf-f02b-4450-94c3-3a2b1681f052" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Bai1/Bai1.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bai2/Bai2.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bai3/Bai3.iml" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="2oEk2OgYH0k7snKKdg1Rtt1rNSx" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/THLTHDT/TH LthHDT/BTLTVN T8"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="eada1acf-f02b-4450-94c3-3a2b1681f052" name="Changes" comment="" />
+      <created>1730441915219</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1730441915219</updated>
+    </task>
+    <servers />
+  </component>
+</project>
