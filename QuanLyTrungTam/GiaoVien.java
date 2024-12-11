@@ -1,39 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package quanlytrungtam;
+package quanlytrungtam_hung;
 
-/**
- *
- * @author LENOVO
- */
-
-
+import java.io.*;
 import java.util.*;
+import quanlytrungtam_hung.TaiLieu;
 
-public class GiaoVien extends Nguoi {
-    private String maGiaoVien; // Mã giáo viên
-    private String chuyenMon; // Chuyên môn của giáo viên
-    private List<String> danhSachKhoaHoc = new ArrayList<>(); // Danh sách các khóa học mà giáo viên dạy
-    private List<String> lichDay = new ArrayList<>(); // Lịch dạy của giáo viên
-    private Map<String, Double> danhSachDiemHocVien = new HashMap<>(); // Danh sách điểm số của học viên
-
-    // Constructor
+public class GiaoVien extends User implements Authentication, IQuanLyLich, IQuanLyKhoaHoc {
+    private String maGiaoVien;
+    private String chuyenMon;
+    private List<String> danhSachKhoaHoc = new ArrayList<>();
+    private List<String> lichDay = new ArrayList<>();
+    private Map<String, Map<String, Double>> diemHocVienTheoKhoaHoc = new HashMap<>();
+    private List<TaiLieu> danhSachTaiLieu = new ArrayList<>();
     public GiaoVien(String hoTen, String gioiTinh, String soDienThoai, String email, String chuyenMon) {
         super(hoTen, gioiTinh, soDienThoai, email);
         this.maGiaoVien = taoMaGiaoVien();
         this.chuyenMon = chuyenMon;
     }
 
-    // Sinh mã giáo viên tự động
     private String taoMaGiaoVien() {
         return "GV-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-    }
-
-    // Getter và Setter
-    public String getMaGiaoVien() {
-        return maGiaoVien;
     }
 
     public String getChuyenMon() {
@@ -44,145 +29,158 @@ public class GiaoVien extends Nguoi {
         this.chuyenMon = chuyenMon;
     }
 
-    public List<String> getDanhSachKhoaHoc() {
-        return danhSachKhoaHoc;
+    public String getMaGiaoVien() {
+        return maGiaoVien;
     }
 
-    public List<String> getLichDay() {
-        return lichDay;
-    }
-
-    public Map<String, Double> getDanhSachDiemHocVien() {
-        return danhSachDiemHocVien;
-    }
-
-    // Phương thức đăng nhập
-    public void dangNhap() {
-        System.out.println("Giao vien " + getHoTen() + " da dang nhap.");
-    }
-    public static GiaoVien dangNhapGiaoVien(Scanner scanner, List<GiaoVien> danhSachGiaoVien) {
-        System.out.println("\n=== DANG NHAP GIAO VIEN ===");
-        System.out.print("Nhap ma giao vien: ");
-        String maGiaoVien = scanner.nextLine();
-
-        // Tìm kiếm giáo viên theo mã
-        for (GiaoVien gv : danhSachGiaoVien) {
-            if (gv.getMaGiaoVien().equalsIgnoreCase(maGiaoVien)) {
-                // Yêu cầu nhập mật khẩu
-                for (int i = 0; i < 3; i++) { // Cho phép nhập sai mật khẩu tối đa 3 lần
-                    System.out.print("Nhap mat khau: ");
-                    String matKhau = scanner.nextLine();
-                    if (gv.getMatKhau().equals(matKhau)) {
-                        System.out.println("Dang nhap thanh cong!");
-                        return gv; // Trả về đối tượng giáo viên đã đăng nhập
-                    } else {
-                        System.out.println("Sai mat khau. Vui long thu lai.");
-                    }
-                }
-                System.out.println("Ban da nhap sai mat khau qua 3 lan. Dang nhap that bai.");
-                return null; // Trả về null nếu nhập sai mật khẩu quá 3 lần
-            }
-        }
-
-        System.out.println("Ma giao vien khong ton tai!");
-        return null; // Trả về null nếu không tìm thấy mã giáo viên
-    }
-
-    // Cập nhật thông tin cá nhân
-    public void capNhatThongTinCaNhan(String soDienThoaiMoi, String emailMoi) {
-        setSoDienThoai(soDienThoaiMoi);
-        setEmail(emailMoi);
-        System.out.println("Thong tin ca nhan cua giao vien " + getHoTen() + " da duoc cap nhat.");
-    }
-
-    // Phân công dạy khóa học
-    public void themKhoaHoc(String khoaHoc) {
-        danhSachKhoaHoc.add(khoaHoc);
-        System.out.println("Giao vien " + getHoTen() + " da duoc phan cong day khoa hoc: " + khoaHoc);
-    }
-
-    // Thêm lịch dạy
-    public void themLichDay(String lich) {
-        lichDay.add(lich);
-        System.out.println("Giao vien " + getHoTen() + " da them lich day: " + lich);
-    }
-
-    // Nhập điểm cho học viên
-    public void nhapDiem(String tenHocVien, Double diem) {
-        danhSachDiemHocVien.put(tenHocVien, diem);
-        System.out.println("Giao vien " + getHoTen() + " da nhap diem " + diem + " cho hoc vien: " + tenHocVien);
-    }
-
-    // Xem danh sách điểm số học viên
-    public void xemDanhSachDiem() {
-        System.out.println("Danh sach diem so cua giao vien " + getHoTen() + ":");
-        if (danhSachDiemHocVien.isEmpty()) {
-            System.out.println("Chua co diem so nao duoc nhap.");
-        } else {
-            for (Map.Entry<String, Double> entry : danhSachDiemHocVien.entrySet()) {
-                System.out.println("- Hoc vien: " + entry.getKey() + ", Diem: " + entry.getValue());
-            }
-        }
-    }
-
-    // Gửi thông báo
-    public void guiThongBao(String thongBao) {
-        System.out.println("Giao vien " + getHoTen() + " da gui thong bao: " + thongBao);
-    }
-
-    // Quản lý danh sách học viên trong khóa học
-    public void quanLyHocVien(List<String> danhSachHocVien) {
-        System.out.println("Giao vien " + getHoTen() + " quan ly danh sach hoc vien:");
-        for (String hocVien : danhSachHocVien) {
-            System.out.println("- " + hocVien);
-        }
-    }
-
-    // Hiển thị thông tin giáo viên
     @Override
-    public void hienThiThongTin() {
-        System.out.println("Giao vien: " + getHoTen() 
-                + ", Ma: " + maGiaoVien 
-                + ", Email: " + getEmail() 
-                + ", Chuyen mon: " + chuyenMon 
-                + ", So khoa hoc dang day: " + danhSachKhoaHoc.size());
+    public boolean dangNhap(String maGiaoVien, String matKhau) {
+        return this.maGiaoVien.equals(maGiaoVien) && getMatKhau().equals(matKhau);
     }
 
-    // Xem danh sách các khóa học được phân công
+    @Override
+    public void doiMatKhau(String matKhauCu, String matKhauMoi) {
+        if (getMatKhau().equals(matKhauCu)) {
+            setMatKhau(matKhauMoi);
+            System.out.println("Đổi mật khẩu thành công!");
+        } else {
+            System.out.println("Mật khẩu cũ không chính xác!");
+        }
+    }
+
+    @Override
+    public void xemLich() {
+        System.out.println("Lịch dạy của giáo viên " + getHoTen() + ": " + lichDay);
+    }
+
+    @Override
+    public void capNhatLich(String lichMoi) {
+        lichDay.add(lichMoi);
+        System.out.println("Lịch dạy được cập nhật: " + lichMoi);
+    }
+
+    @Override
     public void xemDanhSachKhoaHoc() {
-        System.out.println("Danh sach khoa hoc cua giao vien " + getHoTen() + ":");
-        if (danhSachKhoaHoc.isEmpty()) {
-            System.out.println("Hien tai chua co khoa hoc nao.");
-        } else {
-            for (String khoaHoc : danhSachKhoaHoc) {
-                System.out.println("- " + khoaHoc);
-            }
+        System.out.println("Danh sách khóa học của giáo viên " + getHoTen() + ":");
+        for (String khoaHoc : danhSachKhoaHoc) {
+            System.out.println("- " + khoaHoc);
         }
     }
 
-    // Xem lịch dạy
-    public void xemLichDay() {
-        System.out.println("Lich day cua giao vien " + getHoTen() + ":");
-        if (lichDay.isEmpty()) {
-            System.out.println("Hien tai chua co lich day nao.");
-        } else {
-            for (String lich : lichDay) {
-                System.out.println("- " + lich);
-            }
-        }
+    @Override
+    public void thamGiaKhoaHoc(String tenKhoaHoc) {
+        danhSachKhoaHoc.add(tenKhoaHoc);
+        System.out.println("Giáo viên " + getHoTen() + " được phân công giảng dạy khóa học: " + tenKhoaHoc);
     }
 
-    // Cập nhật lịch dạy
-    public void capNhatLichDay(int index, String lichMoi) {
-        if (index >= 0 && index < lichDay.size()) {
-            lichDay.set(index, lichMoi);
-            System.out.println("Lich day da duoc cap nhat thanh cong.");
-        } else {
-            System.out.println("Chi so khong hop le.");
+
+public void hienThiDiemTheoMaKhoaHoc(String maKhoaHoc) {
+    String tenFile = "diemHocVien.txt";
+    try (BufferedReader reader = new BufferedReader(new FileReader(tenFile))) {
+        String line;
+        boolean found = false;
+        System.out.println("=== Điểm học viên cho mã khóa học: " + maKhoaHoc + " ===");
+        
+        while ((line = reader.readLine()) != null) {
+            // Kiểm tra nếu dòng chứa mã khóa học
+            if (line.contains("Mã khóa học: " + maKhoaHoc)) {
+                System.out.println(line);
+                found = true;
+            }
         }
+        
+        if (!found) {
+            System.out.println("Không tìm thấy dữ liệu cho mã khóa học: " + maKhoaHoc);
+        }
+    } catch (IOException e) {
+        System.err.println("Lỗi khi đọc file: " + e.getMessage());
     }
 }
 
+public void hienThiDiemTheoMaHocVien(String maHocVien) {
+    String tenFile = "diemHocVien.txt";
+    try (BufferedReader reader = new BufferedReader(new FileReader(tenFile))) {
+        String line;
+        boolean found = false;
+        System.out.println("=== Điểm học viên cho mã học viên: " + maHocVien + " ===");
+        while ((line = reader.readLine()) != null) {
+            if (line.contains("Mã học viên: " + maHocVien)) {
+                System.out.println(line);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("Không tìm thấy dữ liệu cho mã học viên: " + maHocVien);
+        }
+    } catch (IOException e) {
+        System.err.println("Lỗi khi đọc file: " + e.getMessage());
+    }
+}
+private void ghiDiemVaoFile(String maKhoaHoc, String maHocVien, Double diem) {
+    String tenFile = "diemHocVien.txt"; // Tên file lưu điểm học viên
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(tenFile, true))) {
+        // Ghi thông tin điểm học viên vào file
+        writer.write("Mã khóa học: " + maKhoaHoc + ", Mã học viên: " + maHocVien + ", Điểm: " + diem + "\n");
+        System.out.println("Đã ghi điểm vào file: " + tenFile);
+    } catch (IOException e) {
+        System.err.println("Lỗi khi ghi file: " + e.getMessage());
+    }
+}
+//
+public void nhapDiemTheoMa(String maKhoaHoc, String maHocVien, Double diem) {
+    // Kiểm tra và tạo mới bản ghi điểm cho khóa học nếu chưa tồn tại
+    diemHocVienTheoKhoaHoc.putIfAbsent(maKhoaHoc, new HashMap<>());
+
+    // Thêm hoặc cập nhật điểm cho học viên theo mã học viên
+    diemHocVienTheoKhoaHoc.get(maKhoaHoc).put(maHocVien, diem);
+
+    // In ra thông báo
+    System.out.println("Đã nhập điểm " + diem + " cho học viên có mã " + maHocVien + " trong khóa học có mã " + maKhoaHoc);
+
+    // Ghi dữ liệu vào file sau khi nhập điểm
+    ghiDiemVaoFile(maKhoaHoc, maHocVien, diem);
+}
+
+    // Quản lý tài liệu
+    public void themTaiLieu(TaiLieu taiLieu) {
+        danhSachTaiLieu.add(taiLieu);
+        System.out.println("Đã thêm tài liệu: " + taiLieu.getTenTaiLieu());
+    }
+    public void themTaiLieuTuFile(String duongDanFile) {
+        List<TaiLieu> taiLieuTuFile = TaiLieu.docDanhSachTaiLieu(duongDanFile);
+
+        if (taiLieuTuFile.isEmpty()) {
+            System.out.println("Không có tài liệu nào được đọc từ file.");
+        } else {
+            danhSachTaiLieu.addAll(taiLieuTuFile);
+            System.out.println("Tài liệu từ file đã được thêm vào danh sách.");
+        }
+    }
 
 
+    public void xemDanhSachTaiLieu() {
+        System.out.println("Danh sách tài liệu của giáo viên " + getHoTen() + ":");
+        if (danhSachTaiLieu.isEmpty()) {
+            System.out.println("Chưa có tài liệu nào.");
+        } else {
+            for (TaiLieu taiLieu : danhSachTaiLieu) {
+                System.out.println("- Tên: " + taiLieu.getTenTaiLieu());
+                System.out.println("  Mô tả: " + taiLieu.getMoTa());
+                System.out.println("  Nội dung: " + taiLieu.getNoiDung());
+            }
+        }
+    }
+
+
+
+
+
+    public void hienThiThongTin() {
+        System.out.println("Giáo viên: " + getHoTen() 
+            + ", Mã: " + maGiaoVien 
+            + ", Email: " + getEmail() 
+            + ", Chuyên môn: " + chuyenMon);
+    }
+
+}
 

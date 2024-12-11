@@ -2,112 +2,117 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package quanlytrungtam;
+package quanlytrungtam_hung;
 
-/**
- *
- * @author LENOVO
- */
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
-public class HocVien extends Nguoi {
+public class HocVien extends User implements Authentication, IQuanLyLich, IQuanLyKhoaHoc {
     private String maHocVien;
     private Date ngayNhapHoc;
     private List<String> danhSachKhoaHoc = new ArrayList<>();
     private Map<String, Double> diemSo = new HashMap<>();
+    private Map<String, Boolean> trangThaiThanhToan = new HashMap<>();
 
-    // Constructor
     public HocVien(String hoTen, String gioiTinh, String soDienThoai, String email, Date ngayNhapHoc) {
         super(hoTen, gioiTinh, soDienThoai, email);
         this.maHocVien = taoMaHocVien();
         this.ngayNhapHoc = ngayNhapHoc;
     }
 
-    // Sinh ma hoc vien tu dong
     private String taoMaHocVien() {
         return "HV-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
-    // Getter và Setter
     public String getMaHocVien() {
         return maHocVien;
     }
 
-    public Date getNgayNhapHoc() {
-        return ngayNhapHoc;
-    }
-
-    public void setNgayNhapHoc(Date ngayNhapHoc) {
-        this.ngayNhapHoc = ngayNhapHoc;
-    }
-
-    public List<String> getDanhSachKhoaHoc() {
-        return danhSachKhoaHoc;
-    }
-
-    public Map<String, Double> getDiemSo() {
-        return diemSo;
-    }
-
-    // Các phương thức liên quan đến học viên
-    public void capNhatThongTinCaNhan(String soDienThoaiMoi, String emailMoi) {
-        setSoDienThoai(soDienThoaiMoi);
-        setEmail(emailMoi);
-        System.out.println("Thong tin ca nhan cua hoc vien " + getHoTen() + " da duoc cap nhat.");
-    }
-    // Phương thức đăng nhập cho học viên
-public static HocVien dangNhapHocVien(Scanner scanner, List<HocVien> danhSachHocVien) {
-    System.out.println("\n=== DANG NHAP HOC VIEN ===");
-    System.out.print("Nhap ma hoc vien: ");
-    String maHocVien = scanner.nextLine();
-
-    for (HocVien hv : danhSachHocVien) {
-        if (hv.getMaHocVien().equalsIgnoreCase(maHocVien)) {
-            // Yêu cầu nhập mật khẩu
-            for (int i = 0; i < 3; i++) { // Cho phép nhập sai mật khẩu tối đa 3 lần
-                System.out.print("Nhap mat khau: ");
-                String matKhau = scanner.nextLine();
-                if (hv.getMatKhau().equals(matKhau)) {
-                    System.out.println("Dang nhap thanh cong!");
-                    return hv; // Trả về đối tượng học viên đã đăng nhập
-                } else {
-                    System.out.println("Sai mat khau. Vui long thu lai.");
-                }
-            }
-            System.out.println("Ban da nhap sai mat khau qua 3 lan. Dang nhap that bai.");
-            return null; // Trả về null nếu nhập sai quá 3 lần
-        }
-    }
-
-    System.out.println("Ma hoc vien khong ton tai!");
-    return null; // Trả về null nếu không tìm thấy học viên
-}
-
-    public void xemLichHoc() {
-        System.out.println("Lich hoc cua hoc vien " + getHoTen() + ": " + danhSachKhoaHoc);
-    }
-
-    public void xemDiemThi() {
-        System.out.println("Diem thi cua hoc vien " + getHoTen() + ": " + diemSo);
-    }
-
-    public void themKhoaHoc(String khoaHoc) {
-        danhSachKhoaHoc.add(khoaHoc);
-        System.out.println("Hoc vien " + getHoTen() + " da dang ky khoa hoc: " + khoaHoc);
-    }
-
-    public void guiPhanHoi(String phanHoi) {
-        System.out.println("Hoc vien " + getHoTen() + " da gui phan hoi: " + phanHoi);
+    @Override
+    public boolean dangNhap(String maHocVien, String matKhau) {
+        return this.maHocVien.equals(maHocVien) && getMatKhau().equals(matKhau);
     }
 
     @Override
-    public void hienThiThongTin() {
-        System.out.println("Hoc vien: " + getHoTen() 
-                + ", Ma: " + maHocVien 
-                + ", Email: " + getEmail() 
-                + ", Ngay nhap hoc: " + ngayNhapHoc);
+    public void doiMatKhau(String matKhauCu, String matKhauMoi) {
+        if (getMatKhau().equals(matKhauCu)) {
+            setMatKhau(matKhauMoi);
+            System.out.println("Đổi mật khẩu thành công!");
+        } else {
+            System.out.println("Mật khẩu cũ không chính xác!");
+        }
+    }
+
+    @Override
+    public void xemLich() {
+        System.out.println("Lịch học của học viên " + getHoTen() + ": " + danhSachKhoaHoc);
+    }
+
+    @Override
+    public void capNhatLich(String lichMoi) {
+        System.out.println("Lịch học được cập nhật: " + lichMoi);
+    }
+
+    @Override
+    public void xemDanhSachKhoaHoc() {
+        System.out.println("Danh sách khóa học của học viên " + getHoTen() + ":");
+        for (String khoaHoc : danhSachKhoaHoc) {
+            System.out.println("- " + khoaHoc);
+        }
+    }
+
+    @Override
+    public void thamGiaKhoaHoc(String tenKhoaHoc) {
+        danhSachKhoaHoc.add(tenKhoaHoc);
+        trangThaiThanhToan.put(tenKhoaHoc, false); // Gắn trạng thái chưa thanh toán
+        System.out.println("Học viên " + getHoTen() + " đã tham gia khóa học: " + tenKhoaHoc);
+    }
+
+    public void thanhToanHocPhi(String tenKhoaHoc) {
+        if (trangThaiThanhToan.containsKey(tenKhoaHoc)) {
+            trangThaiThanhToan.put(tenKhoaHoc, true);
+            System.out.println("Đã thanh toán học phí cho khóa học: " + tenKhoaHoc);
+        } else {
+            System.out.println("Khóa học không tồn tại!");
+        }
+    }
+    
+
+public void hienThiDiemTheoMaHocVien() {
+    Scanner scanner = new Scanner(System.in);
+    System.out.print("Nhập mã học viên: ");
+    String maHocVien = scanner.nextLine(); // Nhập mã học viên từ người dùng
+
+    String tenFile = "diemHocVien.txt";
+    try (BufferedReader reader = new BufferedReader(new FileReader(tenFile))) {
+        String line;
+        boolean found = false;
+        System.out.println("=== Điểm học viên cho mã học viên: " + maHocVien + " ===");
+        while ((line = reader.readLine()) != null) {
+            if (line.contains("Mã học viên: " + maHocVien)) {
+                System.out.println(line); // Xuất thông tin dòng có mã học viên
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("Không tìm thấy dữ liệu cho mã học viên: " + maHocVien);
+        }
+    } catch (IOException e) {
+        System.err.println("Lỗi khi đọc file: " + e.getMessage());
     }
 }
+
+    public void hienThiThongTin() {
+        System.out.println("Học viên: " + getHoTen() 
+            + ", Mã: " + maHocVien 
+            + ", Email: " + getEmail() 
+            + ", Ngày nhập học: " + ngayNhapHoc);
+    }
+    
+}
+
 
 
 
